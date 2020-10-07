@@ -14,6 +14,6 @@ exports.signUp = async function (req, res) {
         return res.status(201).send({message: "User was registered successfully!"});
     } catch (err) {
 
-        res.status(500).send({message: err});
+        res.status(500).send({message: err.message});
     }
 };
