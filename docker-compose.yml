@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+
+  mongo:
+    image: mongo:latest
+    container_name: comments-api-mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: comments-db
+    ports:
+        - 27017:27017
+    volumes:
+        - ./docker/mongo/init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+  mongo-express:
+    image: mongo-express
+    container_name: comments-db-mongo-express
+    restart: always
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+    ports:
+      - 8081:8081
