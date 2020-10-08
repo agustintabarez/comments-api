@@ -23,3 +23,18 @@ exports.addComment = async function (req, res) {
         res.status(500).send({message: err.message});
     }
 };
+
+exports.getComment = async function (req, res) {
+
+    try {
+
+        const comment = await CommentModel.findById(req.params['commentId']);
+
+        await comment.populate("createdBy").execPopulate();
+
+        return res.status(200).send(comment);
+    } catch (err) {
+
+        res.status(500).send({message: err.message});
+    }
+};

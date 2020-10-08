@@ -1,5 +1,5 @@
 const controller = require("../controllers/comment.controller");
-const { userMiddleware, commentMiddleware } = require("../middlewares");
+const {userMiddleware, commentMiddleware} = require("../middlewares");
 
 module.exports = function (app) {
     app.use(function (req, res, next) {
@@ -13,4 +13,10 @@ module.exports = function (app) {
             userMiddleware.checkIfUserExists
         ],
         controller.addComment);
+
+    app.get('/api/comments/:commentId',
+        [
+            commentMiddleware.checkIfCommentExists
+        ],
+        controller.getComment)
 };

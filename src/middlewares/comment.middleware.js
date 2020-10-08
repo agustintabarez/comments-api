@@ -1,3 +1,6 @@
+const mongoose = require("mongoose");
+const db = require("../models");
+const CommentModel = db.comment;
 
 checkIfCommentTextIsValid = async function (req, res, next) {
 
@@ -14,8 +17,31 @@ checkIfCommentTextIsValid = async function (req, res, next) {
     next();
 };
 
+checkIfCommentExists = async function (req, res, next) {
+
+    if (!req.params.hasOwnProperty('commentId') || req.params['commentId'] === null) {
+
+        return res.status(400).send({message: "Comment id can not be empty"});
+    }
+
+    if (! mongoose.isValidObjectId(req.params['commentId'])) {
+
+        return res.status(400).send({message: "Comment id is not valid"});
+    }
+
+    const comment = await CommentModel.findById(req.params['commentId']);
+
+    if (comment === null) {
+
+        return res.status(404).send({message: "Comment not found"});
+    }
+
+    next();
+};
+
 const userMiddleware = {
-    checkIfCommentTextIsValid
+    checkIfCommentTextIsValid,
+    checkIfCommentExists
 };
 
 module.exports = userMiddleware;
