@@ -33,6 +33,7 @@ db.mongoose.connect(`mongodb://${dbConfig.USER}:${dbConfig.PASS}@${dbConfig.HOST
 
 // routes
 require('./routes/user.route')(app);
+require('./routes/comment.route')(app);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
