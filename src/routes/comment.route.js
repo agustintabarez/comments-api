@@ -19,4 +19,6 @@ module.exports = function (app) {
             commentMiddleware.checkIfCommentExists
         ],
         controller.getComment)
+
+    app.get('/api/comments', controller.getComments)
 };

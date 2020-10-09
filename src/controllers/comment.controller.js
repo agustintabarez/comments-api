@@ -6,7 +6,7 @@ exports.addComment = async function (req, res) {
 
     try {
 
-        const user = await UserModel.findOne({ 'email': req.body.email });
+        const user = await UserModel.findById(req.body['email']);
 
         const comment = new CommentModel({
             createdBy: user._id,
@@ -14,8 +14,6 @@ exports.addComment = async function (req, res) {
         });
 
         await comment.save();
-
-        await comment.populate("createdBy").execPopulate();
 
         return res.status(201).send(comment);
     } catch (err) {
@@ -30,9 +28,27 @@ exports.getComment = async function (req, res) {
 
         const comment = await CommentModel.findById(req.params['commentId']);
 
-        await comment.populate("createdBy").execPopulate();
-
         return res.status(200).send(comment);
+    } catch (err) {
+
+        res.status(500).send({message: err.message});
+    }
+};
+
+exports.getComments = async function (req, res) {
+
+    try {
+
+        let filter = {};
+
+        if (req.query.hasOwnProperty('email')) {
+
+            filter.createdBy = req.query['email'];
+        }
+
+        const comments = await CommentModel.find(filter);
+
+        return res.status(200).send(comments);
     } catch (err) {
 
         res.status(500).send({message: err.message});

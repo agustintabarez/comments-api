@@ -8,7 +8,7 @@ checkIfEmailIsAlreadyInUse = async function (req, res, next) {
         return res.status(400).send({message: "Email can not be empty"});
     }
 
-    const user = await UserModel.findOne({'email': req.body.email});
+    const user = await UserModel.findOne({'_id': req.body.email});
 
     if (user instanceof UserModel) {
 
@@ -25,7 +25,7 @@ checkIfUserExists = async function (req, res, next) {
         return res.status(400).send({message: "Email must be sent"});
     }
 
-    const user = await UserModel.findOne({'email': req.body.email});
+    const user = await UserModel.findOne({'_id': req.body.email});
 
     if (user === null) {
 

@@ -8,7 +8,7 @@ const CommentModel = mongoose.model(
             default: Date.now
         },
         createdBy: {
-            type: mongoose.Schema.ObjectId,
+            type: String,
             ref: "users",
             required: true
         },

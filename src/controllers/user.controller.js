@@ -6,7 +6,7 @@ exports.signUp = async function (req, res) {
     try {
 
         const user = new UserModel({
-            email: req.body.email,
+            _id: req.body.email,
         });
 
         await user.save();
