@@ -39,9 +39,29 @@ checkIfCommentExists = async function (req, res, next) {
     next();
 };
 
+checkIfUserAlreadyReactedToComment = async function (req, res, next) {
+
+    const comment = await CommentModel.findById(req.params['commentId']);
+
+    let usersWhoGaveLike = comment.likes.get('users');
+    let usersWhoGaveNotLike = comment.notLikes.get('users');
+
+    if (usersWhoGaveLike.contains(req.body['email']) || usersWhoGaveNotLike.contains(req.body['email'])) {
+
+        return res.status(409).send({message: "User already reacted to this comment"});
+    }
+
+    next();
+};
+
+Array.prototype.contains = function(element){
+    return this.indexOf(element) > -1;
+};
+
 const userMiddleware = {
     checkIfCommentTextIsValid,
-    checkIfCommentExists
+    checkIfCommentExists,
+    checkIfUserAlreadyReactedToComment
 };
 
 module.exports = userMiddleware;

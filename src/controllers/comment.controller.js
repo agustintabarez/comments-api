@@ -54,3 +54,45 @@ exports.getComments = async function (req, res) {
         res.status(500).send({message: err.message});
     }
 };
+
+exports.giveLikeToComment = async function (req, res) {
+
+    try {
+
+        const user = await UserModel.findById(req.body['email']);
+
+        const comment = await CommentModel.findById(req.params['commentId']);
+
+        comment.likes.set('qty', comment.likes.get('qty') + 1);
+
+        comment.likes.get('users').push(user._id);
+
+        await comment.save();
+
+        return res.status(200).send(comment);
+    } catch (err) {
+
+        res.status(500).send({message: err.message});
+    }
+};
+
+exports.giveNotLikeToComment = async function (req, res) {
+
+    try {
+
+        const user = await UserModel.findById(req.body['email']);
+
+        const comment = await CommentModel.findById(req.params['commentId']);
+
+        comment.notLikes.set('qty', comment.notLikes.get('qty') + 1);
+
+        comment.notLikes.get('users').push(user._id);
+
+        await comment.save();
+
+        return res.status(200).send(comment);
+    } catch (err) {
+
+        res.status(500).send({message: err.message});
+    }
+};

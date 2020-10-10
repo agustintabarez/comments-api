@@ -21,4 +21,20 @@ module.exports = function (app) {
         controller.getComment)
 
     app.get('/api/comments', controller.getComments)
+
+    app.patch("/api/comments/:commentId/like",
+        [
+            commentMiddleware.checkIfCommentExists,
+            userMiddleware.checkIfUserExists,
+            commentMiddleware.checkIfUserAlreadyReactedToComment,
+        ],
+        controller.giveLikeToComment);
+
+    app.patch("/api/comments/:commentId/not-like",
+        [
+            commentMiddleware.checkIfCommentExists,
+            userMiddleware.checkIfUserExists,
+            commentMiddleware.checkIfUserAlreadyReactedToComment,
+        ],
+        controller.giveNotLikeToComment);
 };

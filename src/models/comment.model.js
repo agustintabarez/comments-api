@@ -16,13 +16,13 @@ const CommentModel = mongoose.model(
             type: String,
             required: true
         },
-        amountOfLikes: {
-            type: Number,
-            default: 0
+        likes: {
+            type: Map,
+            default: { qty: 0, users: [] }
         },
-        amountOfNotLikes: {
-            type: Number,
-            default: 0
+        notLikes: {
+            type: Map,
+            default: { qty: 0, users: [] }
         }
     })
 );
