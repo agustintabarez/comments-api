@@ -17,7 +17,7 @@ module.exports = function (app) {
 
     app.get('/api/comments/:commentId',
         [
-            commentMiddleware.checkICommentExistsInCache,
+            commentMiddleware.checkIfCommentExistsInCache,
             commentMiddleware.checkIfCommentExists
         ],
         controller.getComment)

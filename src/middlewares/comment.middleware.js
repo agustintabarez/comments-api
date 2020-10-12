@@ -3,7 +3,7 @@ const db = require("../models");
 const CommentModel = db.comment;
 const Redis = db.redis;
 
-checkICommentExistsInCache = async function (req, res, next) {
+checkIfCommentExistsInCache = async function (req, res, next) {
 
     const {commentId} = req.params;
 
@@ -108,7 +108,7 @@ Array.prototype.contains = function (element) {
 };
 
 const commentMiddleware = {
-    checkICommentExistsInCache,
+    checkIfCommentExistsInCache,
     checkIfCommentsExistInCache,
     checkIfCommentTextIsValid,
     checkIfCommentExists,
