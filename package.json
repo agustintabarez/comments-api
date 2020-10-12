@@ -1,16 +1,22 @@
 {
   "name": "comments-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Allows to add, read and give reactions on comments.",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "node.js",
+    "nodejs",
     "express",
-    "mongodb"
+    "mongodb",
+    "mongoose",
+    "redis"
   ],
+  "repository" : {
+    "type": "git",
+    "url": "https://github.com/agustintabarez/comments-api.git"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
