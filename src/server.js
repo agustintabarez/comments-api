@@ -16,7 +16,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// parse requests of content-type - application/json
 app.use(bodyParser.json());
 
 db.mongoose.connect(`mongodb://${dbConfig.USER}:${dbConfig.PASS}@${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
@@ -25,13 +24,21 @@ db.mongoose.connect(`mongodb://${dbConfig.USER}:${dbConfig.PASS}@${dbConfig.HOST
     useFindAndModify: false,
     useCreateIndex: true
 }).then(() => {
-    console.log("Successfully connection to MongoDB.");
+    console.log("Success connection to MongoDB.");
 }).catch(err => {
-    console.error("Connection error", err);
+    console.error("Connection error to MongoDB.", err);
     process.exit();
 });
 
-// routes
+db.redis.on("error", function (err) {
+    console.error("Connection error to Redis.", err);
+    process.exit();
+});
+
+db.redis.on("ready", function () {
+    console.log("Success connection to Redis.");
+});
+
 require('./routes/user.route')(app);
 require('./routes/comment.route')(app);
 

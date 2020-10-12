@@ -1,6 +1,55 @@
 const mongoose = require("mongoose");
 const db = require("../models");
 const CommentModel = db.comment;
+const Redis = db.redis;
+
+checkICommentExistsInCache = async function (req, res, next) {
+
+    const {commentId} = req.params;
+
+    Redis.get(`comment:${commentId}`, (err, data) => {
+
+        if (err) {
+
+            res.status(500).send(err);
+        }
+
+        if (data == null) {
+
+            next();
+        } else {
+
+            res.status(200).send(data);
+        }
+    });
+};
+
+checkIfCommentsExistInCache = async function (req, res, next) {
+
+    let key = 'comments';
+
+    if (req.query.hasOwnProperty('email')) {
+
+        const { email } = req.query;
+        key = `users:${email}:comments`;
+    }
+
+    Redis.get(key, (err, data) => {
+
+        if (err) {
+
+            res.status(500).send(err);
+        }
+
+        if (data == null) {
+
+            next();
+        } else {
+
+            res.status(200).send(data);
+        }
+    });
+};
 
 checkIfCommentTextIsValid = async function (req, res, next) {
 
@@ -24,7 +73,7 @@ checkIfCommentExists = async function (req, res, next) {
         return res.status(400).send({message: "Comment id can not be empty"});
     }
 
-    if (! mongoose.isValidObjectId(req.params['commentId'])) {
+    if (!mongoose.isValidObjectId(req.params['commentId'])) {
 
         return res.status(400).send({message: "Comment id is not valid"});
     }
@@ -54,14 +103,16 @@ checkIfUserAlreadyReactedToComment = async function (req, res, next) {
     next();
 };
 
-Array.prototype.contains = function(element){
+Array.prototype.contains = function (element) {
     return this.indexOf(element) > -1;
 };
 
-const userMiddleware = {
+const commentMiddleware = {
+    checkICommentExistsInCache,
+    checkIfCommentsExistInCache,
     checkIfCommentTextIsValid,
     checkIfCommentExists,
     checkIfUserAlreadyReactedToComment
 };
 
-module.exports = userMiddleware;
+module.exports = commentMiddleware;

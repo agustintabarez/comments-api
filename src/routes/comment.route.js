@@ -3,6 +3,7 @@ const {userMiddleware, commentMiddleware} = require("../middlewares");
 
 module.exports = function (app) {
     app.use(function (req, res, next) {
+        res.setHeader("Content-Type", "application/json");
         res.setHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
         next();
     });
@@ -16,11 +17,16 @@ module.exports = function (app) {
 
     app.get('/api/comments/:commentId',
         [
+            commentMiddleware.checkICommentExistsInCache,
             commentMiddleware.checkIfCommentExists
         ],
         controller.getComment)
 
-    app.get('/api/comments', controller.getComments)
+    app.get('/api/comments',
+        [
+            commentMiddleware.checkIfCommentsExistInCache
+        ],
+        controller.getComments)
 
     app.patch("/api/comments/:commentId/like",
         [

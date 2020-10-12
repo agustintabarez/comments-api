@@ -24,3 +24,12 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: root
     ports:
       - 8081:8081
+
+  redis:
+    image: redis:6.0.8
+    container_name: comments-api-redis
+    environment:
+      REDIS_REPLICATION_MODE: master
+      REDIS_PASSWORD: password
+    ports:
+      - 6379:6379
